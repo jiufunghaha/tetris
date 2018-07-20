@@ -7,7 +7,11 @@ import shape.NextShape;
 import shape.Shape;
 import shape.ShapeI;
 import shape.ShapeL;
+import shape.ShapeRL;
+import shape.ShapeRZ;
+import shape.ShapeSquare;
 import shape.ShapeT;
+import shape.ShapeZ;
 
 public class BlockJudge {
 	
@@ -39,7 +43,7 @@ public class BlockJudge {
 		Shape shape = null;
 		Random rd = new Random();
 		int n = rd.nextInt(1);
-		n = 2;
+		n = 3;
 		switch (n) {
 		case 0:
 			shape = new ShapeI();
@@ -49,6 +53,19 @@ public class BlockJudge {
 			break;
 		case 2:
 			shape = new ShapeL();
+			break;
+		case 3:
+			shape = new ShapeRL();
+			break;
+		case 4:
+			shape = new ShapeZ();
+			break;
+		case 5:
+			shape = new ShapeRZ();
+			break;
+		case 6:
+			shape = new ShapeSquare();
+			break;
 
 		default:
 			break;

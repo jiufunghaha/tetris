@@ -13,7 +13,7 @@ public class ShapeL extends Shape{
 			//随机生成状态
 			switch(n){
 			case 0:
-				axisBlock.setIJ(8, 1);
+				axisBlock.setIJ(7, 1);
 				condition = 'l';
 				rotate();
 				break;
@@ -23,7 +23,7 @@ public class ShapeL extends Shape{
 				rotate();
 				break;
 			case 2:
-				axisBlock.setIJ(6, 0);
+				axisBlock.setIJ(7, 0);
 				condition = 'r';
 				rotate();
 				break;
