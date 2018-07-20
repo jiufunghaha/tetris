@@ -1,5 +1,7 @@
 package shape;
 
+import constant.BlockConstant;
+
 public class NextBlock {
 	
 	//网格位置
@@ -40,8 +42,8 @@ public class NextBlock {
 	
 	//I,J与X,Y转换
 	private void setXY(){
-		this.x = 674+42*this.i;
-		this.y = 76+42*this.j;
+		this.x = BlockConstant.NEXT_LEFT_DISTANCE + 42*this.i;
+		this.y = BlockConstant.NEXT_TOP_DISTANCE + 42*this.j;
 	}
 	
 	//设置方块的位置

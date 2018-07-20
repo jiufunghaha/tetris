@@ -1,6 +1,13 @@
 package judge;
 
+import java.util.Random;
+
 import constant.WindowConstant;
+import shape.NextShape;
+import shape.Shape;
+import shape.ShapeI;
+import shape.ShapeL;
+import shape.ShapeT;
 
 public class BlockJudge {
 	
@@ -24,6 +31,40 @@ public class BlockJudge {
 					}
 				}
 			}
+		}
+	}
+	
+	public static Shape getRandomShape(){
+		
+		Shape shape = null;
+		Random rd = new Random();
+		int n = rd.nextInt(1);
+		n = 2;
+		switch (n) {
+		case 0:
+			shape = new ShapeI();
+			break;
+		case 1:
+			shape = new ShapeT();
+			break;
+		case 2:
+			shape = new ShapeL();
+
+		default:
+			break;
+		}
+		return shape;
+	}
+	
+	public static void setNextPosition(NextShape nextShape, boolean nextPosition[][]){
+		for(int i = 0; i < nextPosition.length; i++){
+			for(int j = 0; j < nextPosition[i].length; j++){
+				nextPosition[i][j] = false;
+			}
+		}
+		
+		for(int i = 0; i < nextShape.nextBlocks.length; i++){
+			nextPosition[nextShape.nextBlocks[i].getI()][nextShape.nextBlocks[i].getJ()] = true;
 		}
 	}
 

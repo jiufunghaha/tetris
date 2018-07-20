@@ -11,8 +11,8 @@ import javax.swing.Timer;
 
 import constant.WindowConstant;
 import judge.BlockJudge;
+import shape.NextShape;
 import shape.Shape;
-import shape.ShapeI;
 
 public class TPanel extends JPanel implements KeyListener, ActionListener{
 	
@@ -24,7 +24,10 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	private boolean blockPosition[][] = new boolean[WindowConstant.NUMBER_OF_ROW][WindowConstant.NUMBER_OF_COL];
 	private boolean nextPosition[][] = new boolean[WindowConstant.SIZE_OF_NEXT_WINDOW][WindowConstant.SIZE_OF_NEXT_WINDOW];
 	
-	Shape shape = new ShapeI();
+	Shape shape;
+	Shape next;
+	
+	NextShape nextShape;
 	
 	Timer timer = new Timer(500, this);
 	
@@ -52,6 +55,11 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 				nextPosition[i][j] = false;
 			}
 		}
+		shape = BlockJudge.getRandomShape();
+		next = BlockJudge.getRandomShape();
+		nextShape = new NextShape();
+		nextShape.setNextShape(next);
+		BlockJudge.setNextPosition(nextShape, nextPosition);
 	}
 	
 	/*
@@ -92,7 +100,10 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 				blockPosition[shape.blocks[i].getI()][shape.blocks[i].getJ()] = true;
 			}
 			BlockJudge.eliminate(blockPosition);
-			shape = new ShapeI();
+			shape = next;
+			next = BlockJudge.getRandomShape();
+			nextShape.setNextShape(next);
+			BlockJudge.setNextPosition(nextShape, nextPosition);
 		}
 	}
 
