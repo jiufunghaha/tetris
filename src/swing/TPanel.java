@@ -23,13 +23,18 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	//方块的位置
 	private boolean blockPosition[][] = new boolean[WindowConstant.NUMBER_OF_ROW][WindowConstant.NUMBER_OF_COL];
 	private boolean nextPosition[][] = new boolean[WindowConstant.SIZE_OF_NEXT_WINDOW][WindowConstant.SIZE_OF_NEXT_WINDOW];
+	private boolean isStart;
+	private boolean isEnd;
 	
-	Shape shape;
-	Shape next;
+	private int score;
+	private int speed = 500;
 	
-	NextShape nextShape;
+	private Shape shape;
+	private Shape next;
 	
-	Timer timer = new Timer(500, this);
+	private NextShape nextShape;
+	
+	private Timer timer = new Timer(speed, this);
 	
 	/*
 	 * 无参构造函数
@@ -55,6 +60,9 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 				nextPosition[i][j] = false;
 			}
 		}
+		isStart = true;
+		isEnd = false;
+		score = 0;
 		shape = BlockJudge.getRandomShape();
 		next = BlockJudge.getRandomShape();
 		nextShape = new NextShape();
@@ -69,7 +77,7 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	 */
 	@Override
 	public void paint(Graphics g) {
-		PaintContent.paintBackground(g);
+		PaintContent.paintBackground(g, score, speed);
 		PaintContent.paintBlock(g, blockPosition, nextPosition);
 		shape.paint(g);
 	}
@@ -78,33 +86,41 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	 * 图形下落操作
 	 */
 	private void downShape(){
-		int col = WindowConstant.NUMBER_OF_COL;
-		boolean flag = true;
-		for(int i = 0; i < blockPosition.length; i ++){
-			for(int j = 0; j < blockPosition[i].length; j++){
-				for(int k = 0; k < shape.blocks.length; k++){
-					if((blockPosition[i][j] 
-							&& shape.blocks[k].getI() == i 
-							&& shape.blocks[k].getJ() == j-1) 
-							|| shape.blocks[k].getJ() >= col-1 ){
-						flag = false;
-						break;
+		if(isStart && !isEnd){
+			int col = WindowConstant.NUMBER_OF_COL;
+			boolean flag = true;
+			for(int i = 0; i < blockPosition.length; i ++){
+				for(int j = 0; j < blockPosition[i].length; j++){
+					for(int k = 0; k < shape.blocks.length; k++){
+						if((blockPosition[i][j] 
+								&& shape.blocks[k].getI() == i 
+								&& shape.blocks[k].getJ() == j-1) 
+								|| shape.blocks[k].getJ() >= col-1 ){
+							flag = false;
+							break;
+						}
 					}
 				}
 			}
-		}
-		if(flag){
-			shape.down();
-		}else{
-			for(int i = 0; i < shape.blocks.length; i ++){
-				blockPosition[shape.blocks[i].getI()][shape.blocks[i].getJ()] = true;
+			if(flag){
+				shape.down();
+			}else{
+				for(int i = 0; i < shape.blocks.length; i ++){
+					blockPosition[shape.blocks[i].getI()][shape.blocks[i].getJ()] = true;
+				}
+				score += BlockJudge.eliminate(blockPosition);
+				shape = next;
+				next = BlockJudge.getRandomShape();
+				nextShape.setNextShape(next);
+				BlockJudge.setNextPosition(nextShape, nextPosition);
+				if(BlockJudge.getSpeed(score) != speed){
+					speed = BlockJudge.getSpeed(score);
+					timer.setDelay(speed);
+				}
 			}
-			BlockJudge.eliminate(blockPosition);
-			shape = next;
-			next = BlockJudge.getRandomShape();
-			nextShape.setNextShape(next);
-			BlockJudge.setNextPosition(nextShape, nextPosition);
+			isEnd = BlockJudge.end(blockPosition);
 		}
+		
 	}
 
 	/*
@@ -116,15 +132,15 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			if(!shape.rotateJudge(blockPosition))shape.rotate();
+			if(!shape.rotateJudge(blockPosition) && isStart && !isEnd)shape.rotate();
 			repaint();
 			break;
 		case KeyEvent.VK_LEFT:
-			shape.left();
+			if(isStart && !isEnd)shape.left();
 			repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			shape.right();
+			if(isStart && !isEnd)shape.right();
 			repaint();
 			break;
 		case KeyEvent.VK_DOWN:
@@ -132,7 +148,7 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 			repaint();
 			break;
 		case KeyEvent.VK_SPACE:
-			//TODO 暂停和继续的处理
+			isStart = !isStart;
 			repaint();
 			break;
 		default:

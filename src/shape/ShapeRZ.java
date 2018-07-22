@@ -2,6 +2,8 @@ package shape;
 
 import java.util.Random;
 
+import constant.WindowConstant;
+
 public class ShapeRZ extends Shape{
 	
 	public ShapeRZ(){
@@ -46,19 +48,21 @@ public class ShapeRZ extends Shape{
 	public boolean rotateJudge(boolean[][] blockPosition) {
 		int i = axisBlock.getI();
 		int j = axisBlock.getJ();
+		int col = WindowConstant.NUMBER_OF_COL;
+		int row = WindowConstant.NUMBER_OF_ROW;
 		//判断是否能旋转
-		if(condition == 'v' && (i < 2 || blockPosition[i-2][j]) && (i > 13 || blockPosition[i+1][j-1])){
+		if(condition == 'v' && (i < 2 || blockPosition[i-2][j]) && (i > row-2 || blockPosition[i+1][j-1])){
 			return true;
 		}
 		if(condition == 'v' && blockPosition[i][j-1]){
 			return true;
 		}
 		//右边界碰撞
-		if(condition == 'v' && (i > 13 || blockPosition[i+1][j-1])){
+		if(condition == 'v' && (i > row-2 || blockPosition[i+1][j-1])){
 			axisBlock.setIJ(--i, j);
 		}
 		//下边界碰撞
-		if(condition == 'h' && (j > 18 || blockPosition[i][j+1])){
+		if(condition == 'h' && (j > col-2 || blockPosition[i][j+1])){
 			axisBlock.setIJ(i, --j);
 		}
 		return false;

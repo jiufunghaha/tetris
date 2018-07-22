@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import constant.WindowConstant;
+import judge.BlockJudge;
 import shape.Block;
 import shape.NextBlock;
 
@@ -13,7 +14,7 @@ public class PaintContent {
 	/*
 	 * 画出背景
 	 */
-	public static void paintBackground(Graphics g){
+	public static void paintBackground(Graphics g, int score, int speed){
 		//背景
 		g.setColor(new Color(238,238,238));
 		g.fillRect(0, 0, 862, 960);
@@ -38,11 +39,11 @@ public class PaintContent {
 		g.setFont(new Font("黑体", Font.BOLD, 30));
 		g.drawString("分数:", 680, 300);
 		g.setFont(new Font("黑体", Font.PLAIN, 20));
-//		g.drawString(""+score, 740, 340);
+		g.drawString(""+score, 740, 340);
 		g.setFont(new Font("黑体", Font.BOLD, 30));
 		g.drawString("等级:", 680, 400);
 		g.setFont(new Font("黑体", Font.PLAIN, 20));
-//		g.drawString(""+ShapeMove.getSpeedLevel(speed), 740, 440);
+		g.drawString(""+BlockJudge.getSpeedLevel(speed), 740, 440);
 		g.setFont(new Font("黑体", Font.BOLD, 30));
 		g.drawString("操作说明:", 680, 500);
 		g.setFont(new Font("黑体", Font.PLAIN, 20));

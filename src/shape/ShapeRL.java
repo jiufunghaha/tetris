@@ -2,10 +2,13 @@ package shape;
 
 import java.util.Random;
 
+import constant.WindowConstant;
+
 public class ShapeRL extends Shape{
 	
 	public ShapeRL(){
 		Random rd = new Random();
+		//随机生成四个方向
 		int n = rd.nextInt(4);
 		switch (n) {
 		case 0:
@@ -74,14 +77,16 @@ public class ShapeRL extends Shape{
 	public boolean rotateJudge(boolean[][] blockPosition) {
 		int i = axisBlock.getI();
 		int j = axisBlock.getJ();
+		int col = WindowConstant.NUMBER_OF_COL;
+		int row = WindowConstant.NUMBER_OF_ROW;
 		//判断是否能旋转
-		if((i < 1 || blockPosition[i-1][j]) && (i > 12 || blockPosition[i+2][j])){
+		if((i < 1 || blockPosition[i-1][j]) && (i > row-3 || blockPosition[i+2][j])){
 			return true;
 		}
-		if((i < 2 || blockPosition[i-2][j]) && (i > 13 || blockPosition[i+1][j])){
+		if((i < 2 || blockPosition[i-2][j]) && (i > row-2 || blockPosition[i+1][j])){
 			return true;
 		}
-		if(j > 17 && condition == 'd' && (blockPosition[i][j-1] || (blockPosition[i-1][j-1]))){
+		if(j > col-3 && condition == 'd' && (blockPosition[i][j-1] || (blockPosition[i-1][j-1]))){
 			return true;
 		}
 		if(condition == 'r' && blockPosition[i+1][j]){
@@ -101,11 +106,11 @@ public class ShapeRL extends Shape{
 			axisBlock.setIJ(++i, j);
 		}
 		//右边界碰撞
-		if(condition == 'r' && (i > 12 || blockPosition[i+2][j])){
+		if(condition == 'r' && (i > row-3 || blockPosition[i+2][j])){
 			axisBlock.setIJ(--i, j);
 		}
 		//下边界碰撞
-		if(condition == 'd' && (j > 17 || blockPosition[i][j+2])){
+		if(condition == 'd' && (j > col-3 || blockPosition[i][j+2])){
 			axisBlock.setIJ(i, --j);
 		}
 		//上边界碰撞
