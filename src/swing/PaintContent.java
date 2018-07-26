@@ -54,6 +54,13 @@ public class PaintContent {
 		g.drawString("Space：暂停/开始", 670, 660);
 	}
 	
+	public static void paintEndInformation(Graphics g, int score){
+		g.setFont(new Font("宋体", Font.BOLD, 30));
+		g.setColor(new Color(101011));
+		g.drawString("游戏结束，最终得分："+score, 180, 500);
+		g.drawString("按空格重新开始", 220, 600);
+	}
+	
 	/*
 	 * 画出游戏板块和下一个图形板块的方块
 	 */

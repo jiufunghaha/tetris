@@ -25,6 +25,8 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	private boolean nextPosition[][] = new boolean[WindowConstant.SIZE_OF_NEXT_WINDOW][WindowConstant.SIZE_OF_NEXT_WINDOW];
 	private boolean isStart;
 	private boolean isEnd;
+	private boolean canLeft;
+	private boolean canRight;
 	
 	private int score;
 	private int speed = 500;
@@ -80,6 +82,9 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 		PaintContent.paintBackground(g, score, speed);
 		PaintContent.paintBlock(g, blockPosition, nextPosition);
 		shape.paint(g);
+		if(isEnd){
+			PaintContent.paintEndInformation(g, score);
+		}
 	}
 	
 	/*
@@ -122,6 +127,25 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 		}
 		
 	}
+	
+	//判断形状是否能左右运动
+	public void canLeftOrRight(){
+		canLeft = true;
+		canRight = true;
+		//判断是否可以向左右运动
+		for(int i = 0; i < blockPosition.length; i ++){
+			for(int j = 0; j < blockPosition[i].length; j++){
+				for(int k = 0; k < shape.blocks.length; k++){
+					if(blockPosition[i][j] && shape.blocks[k].getI() == i-1 && shape.blocks[k].getJ() == j || shape.blocks[k].getI() >= WindowConstant.NUMBER_OF_COL-1){
+						canRight = false;
+					}
+					else if(blockPosition[i][j] && shape.blocks[k].getI() == i+1 && shape.blocks[k].getJ() == j || shape.blocks[k].getI() <= 0){
+						canLeft = false;
+					}
+				}
+			}
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -130,17 +154,18 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
+		canLeftOrRight();
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
 			if(!shape.rotateJudge(blockPosition) && isStart && !isEnd)shape.rotate();
 			repaint();
 			break;
 		case KeyEvent.VK_LEFT:
-			if(isStart && !isEnd)shape.left();
+			if(canLeft && isStart && !isEnd)shape.left();
 			repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			if(isStart && !isEnd)shape.right();
+			if(canRight && isStart && !isEnd)shape.right();
 			repaint();
 			break;
 		case KeyEvent.VK_DOWN:
@@ -148,7 +173,12 @@ public class TPanel extends JPanel implements KeyListener, ActionListener{
 			repaint();
 			break;
 		case KeyEvent.VK_SPACE:
-			isStart = !isStart;
+			if(isEnd){
+				init();
+			}
+			else{
+				isStart = !isStart;
+			}
 			repaint();
 			break;
 		default:
